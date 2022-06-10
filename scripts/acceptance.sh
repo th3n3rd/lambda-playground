@@ -1,13 +1,17 @@
 #!/bin/bash
 
+set -e
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 cd "$SCRIPT_DIR/.." || exit
 
-
 cleanup() {
     kill $LAMBDA_API_MOCK_PID
 }
+
+echo "Building locally"
+sam build --beta-features
 
 echo "Deploying locally"
 sam local start-api &
@@ -35,5 +39,3 @@ if [ "$EVENT_TRIGGERED_ACTUAL" != "$EVENT_TRIGGERED_EXPECTED" ]; then
 fi
 
 echo "Acceptance test passed"
-
-
