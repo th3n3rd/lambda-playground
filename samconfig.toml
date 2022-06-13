@@ -1,0 +1,9 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lambda-playground"
+s3_prefix = "lambda-playground"
+region = "eu-west-1"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
