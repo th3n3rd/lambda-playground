@@ -21,6 +21,15 @@ samlocal build --beta-features
 echo "Deploy locally on localstack (as Zip onto S3)"
 samlocal deploy --resolve-s3
 
+echo "Setting up test data"
+awslocal dynamodb put-item \
+    --region eu-west-1 \
+    --table-name "Audience" \
+    --item '{
+        "Id": {"S": "1"},
+        "Target": {"S": "world"}
+      }'
+
 LAMBDA_API_ID=$(awslocal apigateway get-rest-apis --region eu-west-1 | jq -r '.items[0].id')
 LAMBDA_API_URL="https://$LAMBDA_API_ID.execute-api.localhost.localstack.cloud:4566/Prod/hello"
 

@@ -1,7 +1,29 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { lambdaHandler } from '../../app';
+import { dbClient } from '../../db-client';
 
 describe('Unit test for app handler', function () {
+    beforeEach(async () => {
+        await dbClient
+            .put({
+                TableName: 'Audience',
+                Item: {
+                    Id: '1',
+                    Target: 'world',
+                },
+            })
+            .promise();
+    });
+
+    afterEach(async () => {
+        await dbClient.delete({
+            TableName: 'Audience',
+            Key: {
+                Id: '1',
+            },
+        });
+    });
+
     it('verifies successful response', async () => {
         const event: APIGatewayProxyEvent = {
             httpMethod: 'get',

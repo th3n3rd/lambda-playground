@@ -12,4 +12,6 @@ export default {
     coverageDirectory: 'coverage',
     coverageProvider: 'v8',
     testMatch: ['**/tests/unit/*.test.ts'],
+    preset: '@shelf/jest-dynamodb',
+    testEnvironment: 'node', // https://github.com/shelfio/jest-dynamodb/issues/129
 };

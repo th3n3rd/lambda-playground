@@ -1,4 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { dbClient } from './db-client';
 
 /**
  *
@@ -13,10 +14,18 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     let response: APIGatewayProxyResult;
     try {
+        const { Item } = await dbClient
+            .get({
+                TableName: 'Audience',
+                Key: {
+                    Id: '1',
+                },
+            })
+            .promise();
         response = {
             statusCode: 200,
             body: JSON.stringify({
-                message: 'hello world',
+                message: `hello ${Item?.Target}`,
             }),
         };
     } catch (err) {
