@@ -33,6 +33,52 @@ Resources:
         Sourcemap: true
         EntryPoints: 
         - app.ts
+  ReceptionistFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: receptionist/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: SQS # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
+          Properties:
+            Queue: !GetAtt PersonJoinedQueue.Arn
+            BatchSize: 1
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+  LastReceivedPersonFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: last-received-person/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Events:
+        LastReceivedPerson:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /last-received-person
+            Method: get
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+  PersonJoinedQueue:
+    Type: AWS::SQS::Queue
   AudienceTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -40,6 +86,23 @@ Resources:
       PrimaryKey:
         Name: Id
         Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  PeopleReceivedTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: PeopleReceived
+      KeySchema:
+        - AttributeName: Room
+          KeyType: HASH
+        - AttributeName: ReceivedAt
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: Room
+          AttributeType: S
+        - AttributeName: ReceivedAt
+          AttributeType: S
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
@@ -60,3 +123,24 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+  ReceptionistFunction:
+    Description: "Receptionist Lambda Function ARN"
+    Value: !GetAtt ReceptionistFunction.Arn
+  ReceptionistFunctionIamRole:
+    Description: "Implicit IAM Role created for Receptionist function"
+    Value: !GetAtt ReceptionistFunctionRole.Arn
+  LastReceivedPersonApi:
+    Description: "API Gateway endpoint URL for Prod stage for LastReceivedPerson function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/last-person-received"
+  LastReceivedPersonApiLocal:
+    Description: "Localstack API Gateway endpoint URL for Prod stage for LastReceivedPerson function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.localhost.localstack.cloud:4566/Prod/last-person-received"
+  LastReceivedPersonFunction:
+    Description: "LastReceivedPerson Lambda Function ARN"
+    Value: !GetAtt LastReceivedPersonFunction.Arn
+  LastReceivedPersonFunctionIamRole:
+    Description: "Implicit IAM Role created for LastReceivedPerson function"
+    Value: !GetAtt LastReceivedPersonFunctionRole.Arn
+  PersonJoinedQueue:
+    Description: "PersonJoinedQueue SQS Queue ARN"
+    Value: !GetAtt PersonJoinedQueue.Arn
