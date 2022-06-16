@@ -24,27 +24,6 @@ samlocal deploy --resolve-s3
 
 API_GATEWAY_ID=$(awslocal apigateway get-rest-apis --region $DEPLOY_REGION | jq -r '.items[0].id')
 
-echo "Testing Hello Api"
-awslocal dynamodb put-item \
-    --region $DEPLOY_REGION \
-    --table-name "Audience" \
-    --item '{
-        "Id": {"S": "1"},
-        "Target": {"S": "world"}
-      }'
-
-HELLO_API_URL="https://$API_GATEWAY_ID.execute-api.localhost.localstack.cloud:4566/Prod/hello"
-HELLO_API_RESP_EXPECTED='{"message":"hello world"}'
-HELLO_API_RESP_ACTUAL=$(curl --silent "$HELLO_API_URL")
-
-if [ "$HELLO_API_RESP_ACTUAL" != "$HELLO_API_RESP_EXPECTED" ]; then
-    echo "Hello Api acceptance test failed." >&2
-    echo "expected: $HELLO_API_RESP_EXPECTED" >&2
-    echo "actual: $HELLO_API_RESP_ACTUAL" >&2
-    exit 1
-fi
-echo "Hello Api works as expected"
-
 echo "Testing Reception journey"
 echo "Advertise Jane Doe has joined"
 QUEUE_URL=$(awslocal sqs list-queues --region $DEPLOY_REGION | jq -r '.QueueUrls[0]')
