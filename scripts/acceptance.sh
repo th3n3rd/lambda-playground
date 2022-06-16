@@ -22,27 +22,8 @@ samlocal build --beta-features
 echo "Deploy locally on localstack (as Zip onto S3)"
 samlocal deploy --resolve-s3
 
-API_GATEWAY_ID=$(awslocal apigateway get-rest-apis --region $DEPLOY_REGION | jq -r '.items[0].id')
-
-echo "Testing Reception journey"
-echo "Advertise Jane Doe has joined"
-QUEUE_URL=$(awslocal sqs list-queues --region $DEPLOY_REGION | jq -r '.QueueUrls[0]')
-awslocal sqs send-message --queue-url "$QUEUE_URL" --message-body "Jane Doe" --region $DEPLOY_REGION
-
-echo "Waiting for the message to be processed"
-sleep 2
-
-echo "Inspecting the last received person"
-RECEPTION_API_URL="https://$API_GATEWAY_ID.execute-api.localhost.localstack.cloud:4566/Prod/last-received-person"
-RECEPTION_API_RESP_EXPECTED='{"message":"Jane Doe"}'
-RECEPTION_API_RESP_ACTUAL=$(curl --silent "$RECEPTION_API_URL")
-
-if [ "$RECEPTION_API_RESP_ACTUAL" != "$RECEPTION_API_RESP_EXPECTED" ]; then
-    echo "Reception Api acceptance test failed." >&2
-    echo "expected: $RECEPTION_API_RESP_EXPECTED" >&2
-    echo "actual: $RECEPTION_API_RESP_ACTUAL" >&2
-    exit 1
-fi
-echo "Reception journey works as expected"
+echo "Running Acceptance tests"
+cd e2e
+npm run test
 
 echo "Acceptance tests passed"
