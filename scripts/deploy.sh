@@ -24,8 +24,4 @@ samlocal build --beta-features
 echo "Deploy locally on localstack (as Zip onto S3)"
 samlocal deploy --resolve-s3
 
-echo "Running Acceptance tests"
-cd e2e
-npm run test
-
-echo "Acceptance tests passed"
+localstack logs -f
