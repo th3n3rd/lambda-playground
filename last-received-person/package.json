@@ -7,10 +7,9 @@
   "author": "SAM CLI",
   "license": "MIT",
   "scripts": {
-    "unit": "jest",
     "lint": "eslint '*.ts' --quiet --fix",
     "compile": "tsc",
-    "test": "npm run compile && npm run unit"
+    "test": "npm run compile && jest"
   },
   "devDependencies": {
     "@shelf/jest-dynamodb": "^3.0.0",

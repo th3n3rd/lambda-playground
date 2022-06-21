@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { lambdaHandler } from '../../app';
-import { dbClient } from '../../db-client';
+import { lambdaHandler } from '../app';
+import { dbClient } from '../db-client';
 
-describe('Lambda handler', function () {
+describe('App', function () {
     beforeEach(async () => {
         const now = new Date();
         const later = new Date();
