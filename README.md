@@ -1,5 +1,7 @@
 # Lambda Playground
 
+[![Pipeline](https://github.com/th3n3rd/lambda-playground/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/th3n3rd/lambda-playground/actions/workflows/pipeline.yml)
+
 This repository is used as a playground to experiment on building and testing AWS Serverless functions.
 
 The applications use several AWS resources, including Lambda functions, an API Gateway API, DynamoDB Tables and an SQS Queue.
