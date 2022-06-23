@@ -10,6 +10,7 @@ functions=(receptionist last-received-person)
 
 for fn in "${functions[@]}"; do
     pushd "$fn"
+        npm install
         npm run test
     popd
 done
