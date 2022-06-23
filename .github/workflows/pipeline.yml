@@ -18,6 +18,8 @@ jobs:
           pip install aws-sam-cli-local
       - name: Check out source code
         uses: actions/checkout@v3
+      - name: Run Unit and Integration Tests
+        run: ./scripts/test.sh
       - name: Run Acceptance Tests
         run: ./scripts/acceptance.sh
       - run: echo "🍏 This job's status is ${{ job.status }}."
