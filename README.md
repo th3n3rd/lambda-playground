@@ -4,7 +4,7 @@
 
 This repository is used as a playground to experiment on building and testing AWS Serverless functions.
 
-The applications use several AWS resources, including Lambda functions, an API Gateway API, DynamoDB Tables and an SQS Queue.
+The applications use several AWS resources, including Lambda functions, an API Gateway, DynamoDB Tables and an SQS Queue.
 
 These resources are defined in the `template.yaml` file in this project.
 
@@ -17,7 +17,6 @@ Please install and configure the following tools in order to run, deploy and tes
 * [AWS CLI v1.x](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)
 * [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 * [Localstack](https://docs.localstack.cloud/get-started/#installation)
-* [AWS CLI Local](https://docs.localstack.cloud/integrations/aws-cli/#aws-cli) (localstack wrapper for AWS CLI)
 * [SAM CLI Local](https://docs.localstack.cloud/integrations/aws-sam/#aws-sam-cli-for-localstack) (localstack wrapper for SAM CLI)
 
 ## Deploy and Test the applications
