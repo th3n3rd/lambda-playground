@@ -18,6 +18,10 @@ if (process.env.JEST_WORKER_ID) {
         ...dbConfig,
         endpoint: 'http://localhost:8000',
         region: 'local',
+        credentials: {
+            accessKeyId: 'test',
+            secretAccessKey: 'test',
+        },
     };
 }
 
