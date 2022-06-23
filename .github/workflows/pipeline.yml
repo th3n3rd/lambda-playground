@@ -4,22 +4,16 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Python 3.8
+      - name: Setup Python 3.9
         uses: actions/setup-python@v3
         with:
-          python-version: "3.8"
-      - name: Configuring AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: test
-          aws-secret-access-key: test
-          aws-region: eu-west-1
+          python-version: "3.9"
       - name: Setup AWS SAM cli
         uses: aws-actions/setup-sam@v2
       - name: Setup Localstack (and AWS wrappers)
         run: |
           docker pull localstack/localstack
-          pip install localstack
+          pip install localstack==0.14.3.3
           pip install awscli-local[ver1]
           pip install aws-sam-cli-local
       - name: Check out source code

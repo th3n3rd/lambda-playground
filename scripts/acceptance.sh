@@ -26,6 +26,7 @@ samlocal deploy --resolve-s3
 
 echo "Running Acceptance tests"
 cd e2e
+npm install
 npm run test
 
 echo "Acceptance tests passed"

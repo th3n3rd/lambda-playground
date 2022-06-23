@@ -1,20 +1,20 @@
 import { APIGateway, SQS } from 'aws-sdk';
 import fetch from 'node-fetch';
+import { ServiceConfigurationOptions } from 'aws-sdk/lib/service';
 
-const localstackEndpoint = 'http://localhost:4566';
-const region = 'eu-west-1';
+const baseConfig: ServiceConfigurationOptions = {
+    endpoint: 'http://localhost:4566',
+    region: 'eu-west-1',
+    credentials: {
+        accessKeyId: 'test',
+        secretAccessKey: 'test',
+    },
+};
 
-const apiGateway = new APIGateway({
-    endpoint: localstackEndpoint,
-    region: region,
-});
+const apiGateway = new APIGateway(baseConfig);
+const sqs = new SQS(baseConfig);
 
-const sqs = new SQS({
-    endpoint: localstackEndpoint,
-    region: region,
-});
-
-const testTimeout = 10 * 1000;
+const testTimeout = 30 * 1000;
 
 describe('Reception', () => {
     it(

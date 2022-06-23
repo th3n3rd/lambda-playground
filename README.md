@@ -55,6 +55,31 @@ In order to run unit and integration tests in each application, run the followin
 ./scripts/test.sh
 ```
 
+## Caveats
+
+If the pipelines fails there is a big chance the problem is due to either:
+
+* Tooling update (e.g. Localstack CLI newer version)
+* Unexpected slowness triggering timeouts (i.e. build agent gets slow increasing the time needed to run a test)
+
+If the log output provided by GitHub is not enough, it It is recommended to add and enable [this](https://github.com/mxschmitt/action-tmate) step in the pipeline.
+
+Below a simple example that enables an remote terminal via SSH on the build agent, if any of the steps of the pipeline fails.
+
+```shell
+name: Lambda Playground Pipeline
+on: [push]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      # ... other steps
+      - name: Setup debug session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 2
+```
+
 ## Resources
 
 See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
