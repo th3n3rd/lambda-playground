@@ -43,7 +43,7 @@ It can be useful when updating the journey tests or to manually test the applica
 Typically the Serverless functions that are available through an API Gateway will be exposed with an URL with the following format:
 
 ```
-https://$<api-gateway-id>.execute-api.localhost.localstack.cloud:4566/Prod/<serverless-function-api-path>
+https://<api-gateway-id>.execute-api.localhost.localstack.cloud:4566/Prod/<serverless-function-api-path>
 ```
 
 For instance: `"https://duxy6txsxb.execute-api.localhost.localstack.cloud:4566/Prod/last-person-received"`
